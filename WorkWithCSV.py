@@ -5,6 +5,6 @@ import scrab
 bd=[]
 for i in range(0,min(len(cfg.latin_names),len(cfg.usability),len(cfg.names),len(cfg.types))):
     bd.append([cfg.names[i],(cfg.latin_names[i]),cfg.types[i],
-               cfg.usability[i]])#объединяем данные в большой массив
+               cfg.usability[i],cfg.ages[i],cfg.types[i]])#объединяем данные в большой массив
 with open(file='trees',mode='wb') as f:
     pickle.dump(bd,f)#сохранение данных

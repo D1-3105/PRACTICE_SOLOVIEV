@@ -15,6 +15,29 @@ scrab_main_page()#скрабим страницу википедии
 def scrab_current_page(page):
     spice=wikipedia.page(page)
     return spice.content
+def find_topic(txt, type):
+    txt=txt.split('\n')
+    masret=[]
+    for topic in txt:
+        flag = 0
+        for word in topic.split(' '):
+
+            for trigger in cfg.categories['trigger_words_{}'.format(type)]:
+                if trigger in word:
+                    flag=1
+        if flag == 1:
+            masret.append(topic)
+    if len(masret)>1:
+        for topic in masret:
+            print(str(masret.index(topic))+') '+topic)
+        try:
+            num1=int(input('Choose the correct topic(0-{}), if there is no correct topic type "-": '.format(len(masret))))
+            return masret[num1]
+        except:
+            return 'UNKNOWN'
+    if len(masret)==0:
+        return 'UNKNOWN'
+    return masret[0]
 def find_latin_name(text:str):#ищем латинское название
     markerstart=text.find('(лат. ')+len('(лат. ')
     markerstop=0
@@ -70,5 +93,9 @@ for name in cfg.names:
         cfg.latin_names.append(find_latin_name(scrabbed))#ищем иноязычные названия
         cfg.usability.append(find_usability(scrabbed))#заполняем массив использований
         cfg.types.append(find_type(name))#ищем тип дерева
+        print('PROCESSING HEIGHT!')
+        cfg.height.append(find_topic(scrabbed, 'h'))
+        print('PROCESSING AGE!')
+        cfg.ages.append(find_topic(scrabbed,'age'))
     except:
         continue
